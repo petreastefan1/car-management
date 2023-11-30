@@ -1,29 +1,34 @@
-import React, {useState,useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {getCars} from "./../../services/CarService";
 
 import {Car} from "./Car";
-function Home() {
+
+function Home({addCar}) {
 
 
-    let [cars,setCars]=useState([]);
-    useEffect(()=>{
+    let [cars, setCars] = useState([]);
+
+    useEffect(() => {
+
+        handleFetchCars();
+    }, [])
 
 
-
-         handleFetchCars();
-    },[])
+    let handleFetchCars = async () => {
 
 
-    let handleFetchCars= async ()=>{
-
-
-        let data=await getCars();
-
-
+        let data = await getCars();
 
 
         setCars(data);
 
+
+    }
+
+
+    const handleNewCar = () => {
+
+        addCar(true)
 
     }
 
@@ -32,7 +37,7 @@ function Home() {
         <>
             <main>
                 <h1>Cars</h1>
-                <p><a className="button" href="new_book.html">Create New Book</a></p>
+                <p><a onClick={handleNewCar} className="button" href="#">Create New Book</a></p>
                 <table>
                     <thead>
                     <tr>
@@ -40,34 +45,30 @@ function Home() {
                         <th>Model</th>
                         <th>An</th>
                         <th>Culoare</th>
+                        <th>Actiuni</th>
                     </tr>
                     </thead>
 
-                   <tbody className="table-body-container">
+                    <tbody className="table-body-container">
 
-                   {
+                    {
 
-                       cars.length > 0 && (
+                        cars.length > 0 && (
 
-                           cars.map(car => {
+                            cars.map(car => {
 
-                               return <tr><Car masina={car}/></tr>
-
-
+                                return <tr><Car masina={car}/></tr>
 
 
+                            })
+                        )
 
-
-
-                           })
-                       )
-
-                   }
-                   </tbody>
+                    }
+                    </tbody>
                 </table>
             </main>
         </>
-            )
+    )
 }
 
 export default Home
