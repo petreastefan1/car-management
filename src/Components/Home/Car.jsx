@@ -1,19 +1,19 @@
 import React from "react";
 import {deleteCar} from "../../services/CarService"
 
-export function Car({masina}){
+export function Car({masina,addCar}){
 
-    async function removeCar() {
+    async function removeCar(model) {
 
 
-       await deleteCar(masina.model)
+       await deleteCar(model)
 
     }
 
  const handleRemove = () =>{
-
-        removeCar()
-
+        console.log(`/masini/removebymodel/${masina.model}`);
+        removeCar(masina.model);
+     window.location.reload(false)
 
  }
 

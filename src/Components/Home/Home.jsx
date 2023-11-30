@@ -57,7 +57,7 @@ function Home({addCar}) {
 
                             cars.map(car => {
 
-                                return <tr><Car masina={car}/></tr>
+                                return <tr><Car masina={car} addCar={addCar}/></tr>
 
 
                             })

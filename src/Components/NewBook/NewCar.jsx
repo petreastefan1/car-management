@@ -37,6 +37,7 @@ export function NewCar({createNewCar}) {
         }
         if (Object.keys(createdCar).length > 0) {
             addNewCar()
+            createNewCar(false)
         }
     }
     return (

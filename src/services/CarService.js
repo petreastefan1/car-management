@@ -61,7 +61,7 @@ export async function addCar(car) {
 export async function deleteCar(model) {
 
     try {
-        let data = await this.api(`/api/v1/masini/removebymodel/${model}`, "DELETE")
+        let data = await api(`/masini/removebymodel/${model}`, "DELETE")
         let response = await data.json();
 
         if (data.status === 200) {
