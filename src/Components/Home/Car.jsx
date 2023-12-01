@@ -1,34 +1,22 @@
 import React from "react";
-import {deleteCar} from "../../services/CarService"
 
-export function Car({masina,addCar}){
-
-    async function removeCar(model) {
+export function Car({masina,editCar,editCarInfo}) {
 
 
-       await deleteCar(model)
-
+    const handleEditInfo = () =>{
+        editCar(true)
+        editCarInfo(masina)
     }
 
- const handleRemove = () =>{
-        console.log(`/masini/removebymodel/${masina.model}`);
-        removeCar(masina.model);
-     window.location.reload(false)
-
- }
-
-
-
-    return(
+    return (
         <>
             <td>
-                <a href="#">{masina.marca}</a>
+                <a href="#" onClick={handleEditInfo}>{masina.marca}</a>
             </td>
             <td>{masina.model}</td>
             <td>{masina.an}</td>
             <td>{masina.culoare}</td>
-            <td><button onClick={handleRemove} type="button" className="action-button">Remove</button>
-                <button type="button" className="action-button">Edit</button></td>
+
 
         </>
     )

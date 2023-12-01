@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from "react";
-import {getCars} from "./../../services/CarService";
 
+import{useNavigate} from  "react-router-dom"
+import {getCars} from "./../../services/CarService";
 import {Car} from "./Car";
 
-function Home({addCar}) {
+function Home() {
 
 
     let [cars, setCars] = useState([]);
 
+    let navigate=useNavigate();
     useEffect(() => {
 
         handleFetchCars();
@@ -26,18 +28,19 @@ function Home({addCar}) {
     }
 
 
-    const handleNewCar = () => {
 
-        addCar(true)
-
-    }
 
     return (
 
         <>
             <main>
                 <h1>Cars</h1>
-                <p><a onClick={handleNewCar} className="button" href="#">Create New Book</a></p>
+                <p><button className="button" onClick={()=>{
+
+
+                    navigate("add");
+
+                }} >Create New Book</button></p>
                 <table>
                     <thead>
                     <tr>
@@ -45,7 +48,6 @@ function Home({addCar}) {
                         <th>Model</th>
                         <th>An</th>
                         <th>Culoare</th>
-                        <th>Actiuni</th>
                     </tr>
                     </thead>
 
@@ -57,7 +59,7 @@ function Home({addCar}) {
 
                             cars.map(car => {
 
-                                return <tr><Car masina={car} addCar={addCar}/></tr>
+                                return <tr><Car masina={car} key={car.id}   /></tr>
 
 
                             })

@@ -1,29 +1,29 @@
 import React from "react";
-import {useState} from "react";
+
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./Components/Home/Home";
 import {NewCar} from "./Components/NewBook/NewCar";
 function App() {
 
-    const [addCar,setAddCar] = useState(false)
+
+    return (
+
+        <BrowserRouter>
+            <Routes>
+
+
+                <Route path="/" element={<Home/>}/>
+                <Route path="/add" element={<NewCar/>}/>
+
+
+            </Routes>
 
 
 
-    return(
-        <>
+        </BrowserRouter>
 
-        {
-            addCar == false && (
-            <Home addCar={setAddCar}/>
 
-        )}
 
-            {
-                addCar == true && (
-                    <NewCar createNewCar={setAddCar}/>
-
-                )}
-
-        </>
     )
 }
 

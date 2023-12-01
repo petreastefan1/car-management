@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import {addCar} from "../../services/CarService";
 
-export function NewCar({createNewCar}) {
+export function NewCar() {
 
     const marcaInpt = useRef()
     const modelInpt = useRef()
@@ -10,35 +10,28 @@ export function NewCar({createNewCar}) {
     const [createdCar, setCreatedCar] = useState({})
 
 
-    async function addNewCar() {
-
-
-        await addCar(createdCar)
-
-    }
-
-    const handleNewCar = () => {
-
-        createNewCar(false)
-
-    }
+    // const handleNewCar = () => {
+    //
+    //     createNewCar(false)
+    //
+    // }
 
     const handlePostCar = () => {
 
         if (marcaInpt.current.value.length > 0 && modelInpt.current.value.length > 0 &&
             anInpt.current.value.length > 0 && culoareInpt.current.value.length > 0) {
             setCreatedCar({
-                id: Math.random() * 100,
-                marca: `${marcaInpt.current.value}`,
-                model: `${modelInpt.current.value}`,
-                an: `${anInpt.current.value}`,
-                culoare: `${culoareInpt.current.value}`,
-            })
+                id: 1,
+                marca: marcaInpt.current.value,
+                model: modelInpt.current.value,
+                an: anInpt.current.value,
+                culoare: culoareInpt.current.value,
+            });
         }
         if (Object.keys(createdCar).length > 0) {
-            addNewCar()
-            createNewCar(false)
+            addCar(createdCar)
         }
+
     }
     return (
         <>
@@ -65,7 +58,7 @@ export function NewCar({createNewCar}) {
                     <a class="button" onClick={handlePostCar} href="#" type="button">Create New Car</a>
                 </p>
                 <p>
-                    <a onClick={handleNewCar} className="button" href="#">Cancel</a>
+                    <a className="button" href="#">Cancel</a>
                 </p>
             </form>
         </>

@@ -58,10 +58,10 @@ export async function addCar(car) {
 
 }
 
-export async function deleteCar(model) {
+export async function deleteCar(id) {
 
     try {
-        let data = await api(`/masini/removebymodel/${model}`, "DELETE")
+        let data = await api(`/masini/removebyid/${id}`, "DELETE")
         let response = await data.json();
 
         if (data.status === 200) {
@@ -75,3 +75,37 @@ export async function deleteCar(model) {
 
 }
 
+
+export async function editCar(car) {
+
+    try {
+        let data = await api(`/masini/update/`, "PUT", car)
+
+        if (data.status === 200) {
+            let resp = await data.json();
+            console.log("Your car has been updated")
+        } else {
+            console.log("Your car was not updated")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getCarById(id){
+
+    try{
+        let data = await api(`/masini/findById/${id}`)
+
+        if(data.status === 200){
+            console.log("Your car has been found");
+            return await data.json();
+        }else{
+            console.log("Your car was not found")
+        }
+    }catch(error){
+        console.log(error)
+    }
+
+
+}
