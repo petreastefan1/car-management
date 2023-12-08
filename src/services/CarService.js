@@ -1,6 +1,5 @@
 import React from "react";
 
-
 function api(path, method, body = null) {
 
     const url = "http://localhost/api/v1" + path;
@@ -46,9 +45,10 @@ export async function addCar(car) {
         if (data.status === 201) {
             let resp = await data.json();
             console.log("Your car has been posted")
+            return true
         } else {
             let resp = await data.json();
-
+            return false
             console.log("Your car did not get posted")
         }
     } catch (error) {
@@ -62,12 +62,13 @@ export async function deleteCar(id) {
 
     try {
         let data = await api(`/masini/removebyid/${id}`, "DELETE")
-        let response = await data.json();
 
         if (data.status === 200) {
             console.log("Your car has been remove")
+            return true
         } else {
             console.log("Your car did not get remove")
+            return false
         }
     } catch (error) {
         console.log(error)
@@ -83,12 +84,16 @@ export async function editCar(car) {
 
         if (data.status === 200) {
             let resp = await data.json();
-            console.log("Your car has been updated")
+           return true;
         } else {
             console.log("Your car was not updated")
+
+            return false
         }
     } catch (error) {
         console.log(error)
+
+        return  false;
     }
 }
 

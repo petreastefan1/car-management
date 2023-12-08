@@ -100,7 +100,7 @@ input[type=text] {
     height: max-content;
 }
 
-.action-button{
+.new-book-btn{
     height:30px;
     color: white;
     background: #019875;
@@ -110,4 +110,16 @@ input[type=text] {
     cursor: pointer;
     margin-right:10px;
     border:none;
+}
+
+span{
+    color: #019875;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.4s;
+}
+
+span:hover{
+    color: black;
+    cursor:pointer;
 }

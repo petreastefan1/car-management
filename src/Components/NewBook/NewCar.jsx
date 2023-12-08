@@ -1,41 +1,55 @@
 import React, {useState, useRef, useEffect} from "react";
 import {addCar} from "../../services/CarService";
+import {useNavigate} from "react-router-dom";
+import {Alert} from "antd";
+
+
 
 export function NewCar() {
 
-    const marcaInpt = useRef()
-    const modelInpt = useRef()
-    const anInpt = useRef()
-    const culoareInpt = useRef()
-    const [createdCar, setCreatedCar] = useState({})
+    const marcaInpt = useRef();
+    const modelInpt = useRef();
+    const anInpt = useRef();
+    const culoareInpt = useRef();
+    const [createdCar, setCreatedCar] = useState({});
+    let navigate=useNavigate();
+    const [success,setSuccess] = useState()
+
+    const handlePostCar = async () => {
 
 
-    // const handleNewCar = () => {
-    //
-    //     createNewCar(false)
-    //
-    // }
-
-    const handlePostCar = () => {
-
-        if (marcaInpt.current.value.length > 0 && modelInpt.current.value.length > 0 &&
-            anInpt.current.value.length > 0 && culoareInpt.current.value.length > 0) {
             setCreatedCar({
-                id: 1,
-                marca: marcaInpt.current.value,
-                model: modelInpt.current.value,
+                marca: `${marcaInpt.current.value}`,
+                model: `${modelInpt.current.value}`,
                 an: anInpt.current.value,
-                culoare: culoareInpt.current.value,
+                culoare: `${culoareInpt.current.value}`,
             });
+            let response = await addCar(createdCar)
+
+        if(response==true){
+            setSuccess(true)
+            setTimeout(()=>
+            {navigate("/")},2000)
         }
-        if (Object.keys(createdCar).length > 0) {
-            addCar(createdCar)
+        else{
+            setSuccess(false)
         }
 
     }
     return (
         <>
+            {
+                success ==true &&(
+                    <Alert message="Your car has been edited!" type="success" />
+                )
 
+            }
+
+            {
+                success == false &&(
+                    <Alert message="Your car was not edited!" type="error" />
+                )
+            }
             <h1>New Car</h1>
             <form>
                 <p>
@@ -58,7 +72,13 @@ export function NewCar() {
                     <a class="button" onClick={handlePostCar} href="#" type="button">Create New Car</a>
                 </p>
                 <p>
-                    <a className="button" href="#">Cancel</a>
+                    <a className="button" href="#"  onClick={()=>{
+
+
+
+                        navigate("/");
+
+                    }}>Cancel</a>
                 </p>
             </form>
         </>

@@ -1,17 +1,20 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
-export function Car({masina,editCar,editCarInfo}) {
+
+export function Car({masina}) {
+
+    let navigate= useNavigate()
 
 
-    const handleEditInfo = () =>{
-        editCar(true)
-        editCarInfo(masina)
-    }
 
     return (
         <>
             <td>
-                <a href="#" onClick={handleEditInfo}>{masina.marca}</a>
+                <span  onClick={()=>{
+
+                    navigate("/edit/"+masina.id)
+                }}>{masina.marca}</span>
             </td>
             <td>{masina.model}</td>
             <td>{masina.an}</td>

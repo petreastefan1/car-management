@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import{useNavigate} from  "react-router-dom"
 import {getCars} from "./../../services/CarService";
 import {Car} from "./Car";
+import {Alert} from "antd";
 
 function Home() {
 
@@ -34,13 +35,14 @@ function Home() {
 
         <>
             <main>
+
                 <h1>Cars</h1>
-                <p><button className="button" onClick={()=>{
+                <a><button className="button new-book-btn" onClick={()=>{
 
 
                     navigate("add");
 
-                }} >Create New Book</button></p>
+                }} >Create New Book</button></a>
                 <table>
                     <thead>
                     <tr>
@@ -59,7 +61,7 @@ function Home() {
 
                             cars.map(car => {
 
-                                return <tr><Car masina={car} key={car.id}   /></tr>
+                                return <tr><Car masina={car} key={car.id}/></tr>
 
 
                             })

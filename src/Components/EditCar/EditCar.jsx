@@ -1,22 +1,26 @@
 import React, {useEffect} from "react";
-import {editCar, getCarById,deleteCar} from "../../services/CarService";
+import {editCar, getCarById, deleteCar} from "../../services/CarService";
 import {useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {Alert} from 'antd';
 
 export function EditCar() {
 
 
-    let id = 31;
+    let navigate = useNavigate()
+
+    let id = useParams().id;
 
     const [marca, setMarca] = useState("");
     const [model, setModel] = useState("");
     const [an, setAn] = useState(0);
     const [culoare, setCuloare] = useState("");
+    const [editSuccess, setEditSuccess] = useState()
+    const [deleteSucess,setDeleteSuccess] = useState()
+    useEffect(() => {
 
-
-    useEffect(()=>{
-
-     handleGetCar();
-    },[])
+        handleGetCar();
+    }, [])
 
     let handleGetCar = async () => {
 
@@ -31,30 +35,74 @@ export function EditCar() {
     }
 
 
+    const handleUpdate = async () => {
 
-    const handleUpdate = ()=>{
+        const newCar = {
+            marca: marca,
+            model: model,
+            an: an,
+            culoare: culoare
+        }
 
-     const newCar={
-      marca:marca,
-      model:model,
-      an:an,
-      culoare:culoare
-     }
+        let response = await editCar(newCar);
 
-     editCar(newCar)
+        if (response == true) {
+            setEditSuccess(true)
+            setTimeout(() => {
+                navigate("/")
+            }, 2000)
+        } else {
+            setEditSuccess(false)
+
+        }
+
     }
 
-    const handleRemove = ()=>{
+    const handleRemove = async () => {
 
-     deleteCar(id)
+        let response = await deleteCar(id)
 
+        if(response==true){
+            setDeleteSuccess(true)
+            setTimeout(() => {
+                navigate("/")
+            }, 2000)
+        }
+        else{
+            setDeleteSuccess(false)
+        }
 
     }
+
 
     return (
 
         <>
+            {
+                editSuccess == true && (
+                    <Alert message="Your car has been edited!" type="success"/>
+                )
 
+            }
+
+            {
+                editSuccess == false && (
+                    <Alert message="Your car was not edited!" type="error"/>
+                )
+            }
+
+            {
+                deleteSucess == true && (
+                    <Alert message="Your car has been removed!" type="success"/>
+                )
+
+            }
+
+            {
+                deleteSucess == false && (
+                    <Alert message="Your car was not removed!" type="error"/>
+                )
+            }
             <h1>Update Car</h1>
             <form>
                 <p>
@@ -67,21 +115,28 @@ export function EditCar() {
                 </p>
                 <p>
                     <label htmlFor="an">An</label>
-                    <input name="an" type="text" id="an" value={an} onChange={(event)=>{
-                     setAn(event.target.value)
+                    <input name="an" type="text" id="an" value={an} onChange={(event) => {
+                        setAn(event.target.value)
                     }}/>
                 </p>
                 <p>
                     <label htmlFor="culoare">Culoare</label>
-                    <input name="culoare" type="text" id="culoare" value={culoare} onChange={(event)=>{
-                     setCuloare(event.target.value)
+                    <input name="culoare" type="text" id="culoare" value={culoare} onChange={(event) => {
+                        setCuloare(event.target.value)
                     }}/>
                 </p>
+
                 <p>
-                    <a class="button" href="#" type="button" onClick={handleUpdate}>Update Car</a>
+
+                    <a class="button" href="#" type="button" onClick={handleUpdate
+
+                    }>Update Car</a>
+
                 </p>
                 <p>
-                    <a className="button" href="#">Cancel</a>
+                    <a className="button" href="#" onClick={() => {
+                        navigate("/")
+                    }}>Cancel</a>
                 </p>
                 <p>
                     <a className="button" href="#" onClick={handleRemove}>Delete Car</a>
