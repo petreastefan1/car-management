@@ -7,66 +7,164 @@ import {Alert} from "antd";
 
 export function NewCar() {
 
-    const marcaInpt = useRef();
-    const modelInpt = useRef();
-    const anInpt = useRef();
-    const culoareInpt = useRef();
+    const [marcaInpt,setMarcaInpt] = useState("");
+    const [modelInpt,setModelInpt] = useState("");
+    const [anInpt,setAnInpt] = useState(0);
+    const [culoareInpt,setCuloareInpt] = useState("");
     const [createdCar, setCreatedCar] = useState({});
     let navigate=useNavigate();
-    const [success,setSuccess] = useState()
+    const [success,setSuccess] = useState();
+
+    let [errors,setErrors]=useState([]);
 
     const handlePostCar = async () => {
 
+        checkFields();
+           if(errors.length==0){
+               setCreatedCar({
+                   marca: marcaInpt,
+                   model: modelInpt,
+                   an: anInpt,
+                   culoare: culoareInpt,
+               });
+               let response = await addCar(createdCar)
+               if(response==true){
+                   setSuccess(true)
+                   setTimeout(()=>
+                   {navigate("/")},1000)
+               }
+               else{
+                   setSuccess(false)
+               }
+           }
+    }
 
-            setCreatedCar({
-                marca: `${marcaInpt.current.value}`,
-                model: `${modelInpt.current.value}`,
-                an: anInpt.current.value,
-                culoare: `${culoareInpt.current.value}`,
-            });
-            let response = await addCar(createdCar)
+    function handleAlerts(success){
 
-        if(response==true){
-            setSuccess(true)
-            setTimeout(()=>
-            {navigate("/")},2000)
+
+        if(success==true){
+           return <Alert message="Your car has been added!" type="success" />
+        }
+        if(success==false){
+           return <Alert message="Your car was not added!" type="error" />
         }
         else{
-            setSuccess(false)
+            return null
+        }
+    }
+
+
+
+
+
+
+    function  checkFields(){
+
+
+        let aux=[];
+
+        if(marcaInpt==""){
+
+            aux.push("Marca trebuie completata");
+        };
+        if(modelInpt==""){
+            aux.push("Modelul trebuie completat")
+        };
+        if(anInpt==0){
+            aux.push("Anul trebuie completat");
+        }
+        if(culoareInpt==""){
+            aux.push("Culoarea trebuie completata")
         }
 
+        if(anInpt< 1900 || anInpt.length<4){
+            aux.push("Anul nu este valid!");
+        }
+
+        if(anInpt>2023 || anInpt.length>4){
+            aux.push("Anul nu este valid!");
+        }
+
+        if(culoareInpt.length>10 || culoareInpt.length <3){
+            aux.push("Culoarea nu are lungimea necesara!")
+        }
+
+        if(marcaInpt.length>10 || marcaInpt.length <3){
+            aux.push("Marca nu are lungimea necesara!")
+        }
+
+        if(modelInpt.length>10 || modelInpt.length <3){
+            aux.push("Modelul nu are lungimea necesara!")
+        }
+
+        if(/\d/.test(culoareInpt)==true){
+            aux.push("Culoarea nu poate contine numere!")
+        }
+
+        if(/\d/.test(marcaInpt)==true){
+            aux.push("Marca nu poate contine numere!")
+        }
+
+        if(/\d/.test(modelInpt)==true){
+            aux.push("Modelul nu poate contine numere!")
+        }
+
+        if(/^\d+$/.test(anInpt)==false){
+            aux.push("Anul nu poate contine litere!")
+        }
+
+        if(Number.isInteger(parseInt(anInpt))!== true){
+            aux.push("Anul nu poate contine litere!")
+        }
+
+        setErrors(aux);
     }
+
+
+
+
     return (
         <>
             {
-                success ==true &&(
-                    <Alert message="Your car has been edited!" type="success" />
-                )
-
+                handleAlerts(success)
             }
-
             {
-                success == false &&(
-                    <Alert message="Your car was not edited!" type="error" />
-                )
+                errors.map(err=>{
+
+                    return <Alert message={err} type="error" />
+                    if(success==true){
+                        return <Alert message="Car has been added" type="success" />
+                    }
+                })
             }
             <h1>New Car</h1>
             <form>
                 <p>
                     <label htmlFor="marca">Marca</label>
-                    <input ref={marcaInpt} name="marca" type="text" id="marca"/>
+                    <input onChange={event=>{
+                        setMarcaInpt(event.target.value)
+
+                    }} name="marca" type="text" id="marca"/>
                 </p>
                 <p>
                     <label htmlFor="model">Model</label>
-                    <input ref={modelInpt} name="model" type="text" id="model"/>
+                    <input onChange={event=>{
+                        setModelInpt(event.target.value)
+
+                    }} name="model" type="text" id="model"/>
                 </p>
                 <p>
                     <label htmlFor="an">An</label>
-                    <input ref={anInpt} name="an" type="text" id="an"/>
+                    <input onChange={event=>{
+                        setAnInpt(event.target.value)
+
+                    }} name="an" type="text" id="an"/>
                 </p>
                 <p>
                     <label htmlFor="culoare">Culoare</label>
-                    <input ref={culoareInpt} name="culoare" type="text" id="culoare"/>
+                    <input onChange={event=>{
+                        setCuloareInpt(event.target.value)
+                    }} name="culoare" type="text" id="culoare"/>
                 </p>
                 <p>
                     <a class="button" onClick={handlePostCar} href="#" type="button">Create New Car</a>

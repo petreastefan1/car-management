@@ -16,17 +16,25 @@ export function EditCar() {
     const [an, setAn] = useState(0);
     const [culoare, setCuloare] = useState("");
     const [editSuccess, setEditSuccess] = useState()
-    const [deleteSucess,setDeleteSuccess] = useState()
+    const [deleteSucess, setDeleteSuccess] = useState();
+    const [errorMessage, setErrorMessage] = useState("");
+    const [succesMessage, setSuccesMessage] = useState("");
+
+    const [errors,setErrors]=useState([]);
+
     useEffect(() => {
 
         handleGetCar();
     }, [])
 
+
+
+
     let handleGetCar = async () => {
+
 
         let car = await getCarById(id);
 
-        console.log(car);
         setMarca(car.marca);
         setModel(car.model);
         setAn(car.an);
@@ -34,75 +42,111 @@ export function EditCar() {
 
     }
 
+    function validators(){
+
+
+        let aux=[];
+
+
+        if(an< 1900 || an.length<4){
+            aux.push("The year is not valid");
+        }
+
+        if(an>2023 || an.length>4){
+            aux.push("The year is not valid");
+        }
+
+        if(culoare.length>10 || culoare.length <3){
+            aux.push("The colour is not valid")
+        }
+
+
+        if(/\d/.test(culoare)==true){
+            aux.push("The colour cannot contain numbers")
+        }
+
+
+
+
+
+        setErrors(aux);
+   return aux.length;
+
+    }
+
+
 
     const handleUpdate = async () => {
 
-        const newCar = {
-            marca: marca,
-            model: model,
-            an: an,
-            culoare: culoare
+      ;
+        if(validators()==0){
+
+            const newCar = {
+                marca: marca,
+                model: model,
+                an: an,
+                culoare: culoare
+
+            }
+
+            let response = await editCar(newCar);
+
+
+
+            if (response.type == "succes") {
+
+                setSuccesMessage(`${response.msg}`)
+                setErrorMessage("")
+                setEditSuccess(true)
+                setTimeout(() => {
+                    navigate("/")
+                }, 1000)
+            } else {
+
+                setErrorMessage(`${response.msg}`)
+                setEditSuccess(false)
+            }
+
+
         }
-
-        let response = await editCar(newCar);
-
-        if (response == true) {
-            setEditSuccess(true)
-            setTimeout(() => {
-                navigate("/")
-            }, 2000)
-        } else {
-            setEditSuccess(false)
-
-        }
-
     }
 
     const handleRemove = async () => {
 
         let response = await deleteCar(id)
 
-        if(response==true){
+        if (response == true) {
             setDeleteSuccess(true)
+            setSuccesMessage("Your car has been removed succesfully!")
             setTimeout(() => {
                 navigate("/")
-            }, 2000)
-        }
-        else{
+            }, 1000)
+        } else {
             setDeleteSuccess(false)
         }
 
     }
 
 
+
     return (
 
         <>
+
             {
-                editSuccess == true && (
-                    <Alert message="Your car has been edited!" type="success"/>
-                )
+                errorMessage != "" && <Alert message={`${errorMessage}`} type="error"/>
 
             }
 
             {
-                editSuccess == false && (
-                    <Alert message="Your car was not edited!" type="error"/>
-                )
-            }
-
-            {
-                deleteSucess == true && (
-                    <Alert message="Your car has been removed!" type="success"/>
-                )
+                succesMessage != "" && <Alert message={`${succesMessage}`} type="success"/>
 
             }
 
             {
-                deleteSucess == false && (
-                    <Alert message="Your car was not removed!" type="error"/>
-                )
+                errors.length>0&&errors.map(errorMessage=><Alert message={`${errorMessage}`} type="error"/>)
             }
+
             <h1>Update Car</h1>
             <form>
                 <p>

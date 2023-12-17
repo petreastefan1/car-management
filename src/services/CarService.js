@@ -84,16 +84,26 @@ export async function editCar(car) {
 
         if (data.status === 200) {
             let resp = await data.json();
-           return true;
-        } else {
-            console.log("Your car was not updated")
-
-            return false
+           return {
+                    value:resp,
+                    msg:"Your car has been updated!",
+                    type:"succes"
+           }
+            }else{
+            let resp = await data.json();
+            return{
+                value:resp,
+                type:"error",
+                msg:`Something went wrong`
+            }
         }
-    } catch (error) {
-        console.log(error)
 
-        return  false;
+    } catch (error) {
+
+        return {
+            value:error.message,
+            type:"error"
+        };
     }
 }
 
